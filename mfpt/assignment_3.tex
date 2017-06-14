@@ -1,0 +1,132 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the 
+
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+
+\begin{document}
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\section*{\underline{Mean first passage time of active particles}}
+
+%----------------------------------------------------------------------------------------
+
+\subsection*{The SDE}
+
+The SDEs governing the dynamics of the particle are
+\begin{equation}\label{position sde}
+\frac{d}{dt} \vec r (t) =  \vec \xi(t) +v_0(r) \vec p (t)
+\end{equation}
+\begin{equation}\label{oriantation sde}
+\frac{d}{dt} \vec p (t) = \vec \eta (t) \times \vec p(t) ,
+\end{equation}
+with $\left< \vec \xi(t) \vec \xi (t') \right> = 2 D_t \delta(t-t') \mathbb{1} $. 
+Averaging out the orientational degrees of freedom results in a course grained equation for the position:
+\begin{equation}\label{course grained sde}
+\frac{d}{dt} \vec r (t) =  \vec \xi (t) + \vec \chi (t).
+\end{equation}
+The noise due to the course graining of the equation is approximately Gaussian with exponential time correlations, $\left< \vec \chi (t) \vec \chi (t') \right> = \frac{1}{3} v_0(r)^2 e^{-2D_r|t-t'|} \mathbb{1} = \frac{1}{6 D_r \tau} v_0(r)^2 e^{-|t-t'|/\tau} \mathbb{1}$ with $\tau = \frac{1}{2D_r}$.
+
+\subsection*{The Fokker Planck Equation}
+Equation \ref{course grained sde} has colored noise, but an approximate FPE can be obtained using Fox's method:
+\begin{align}\label{fpe}
+\partial_t P(\vec r,t) & = D_t \nabla^2 P(\vec r,t) + \frac{1}{6D_r}  \vec \nabla    \cdot \left[ v_0(r) \vec \nabla \left( v_0(r) P(\vec r,t)\right) \right] \\
+& = - \frac{1}{6D_r}  \vec \nabla    \cdot \left[ \left(\vec \nabla v_0(r)\right)  v_0(r) P(\vec r,t) \right] \ 
++ \ \nabla^2 \left[ \left( D_t + \frac{v_0(r)^2}{6 D_r} \right) P(\vec r,t) \right].
+\end{align}
+Terms of order $\frac{1}{D_r^2}$ and higher are neglected.
+
+The adjoint of the FP operator is
+\begin{equation}\label{adjoint fpe operator}
+\mathit{L}^\dagger = \frac{1}{6D_r} v_0(r) v'_0(r) \hat{r} \cdot \vec \nabla 
++ \left( D_t + \frac{v_0(r)^2}{6D_r} \right) \nabla^2,
+\end{equation}
+with $\vec{\nabla} v_0(r) = \hat{r}v_0'(r)$.
+
+\subsection*{The mean first passage time}
+The mean first passage time ($\tau(r)$) is governed by the adjoint of the FP operator:
+\begin{equation}\label{mfpt}
+\frac{1}{6D_r} v_0(r) v'_0(r) \hat{r} \cdot \vec \nabla \tau(r)
++ \left( D_t + \frac{v_0(r)^2}{6D_r} \right) \nabla^2 \tau(r) =-1,
+\end{equation}
+with boundary conditions 
+\begin{equation}\label{bc}
+\tau(a) = 0 \ \ \ \ \text{and} \ \ \ \  \hat{r} \cdot \vec \nabla \tau(r) \bigg\rvert_{r=R} = \partial_r \tau(r) \bigg\rvert_{r=R} = 0,
+\end{equation}
+where $a$ is the radius of the inner, absorbing shell, and $R$ is the radius of the outer, reflecting shell.
+Using the gradient and divergence in spherical coordinates eq. \ref{mfpt} becomes
+\begin{align}\label{mfpt spherical}
+-1 &= \frac{1}{6 D_r} v_0(r) v_0'(r) \frac{\partial}{\partial r} \tau(r) + \left( D_t + \frac{v_0(r)^2}{6 D_r} \right) r^{-2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial}{\partial r} \tau(r) \right) \\
+& = \left[ \frac{1}{6 D_r} v_0(r) v_0'(r) + \frac{2}{r} \left( D_t + \frac{v_0(r)^2}{6 D_r} \right) \right] \frac{\partial}{\partial r} \tau(r)
++ \left( D_t + \frac{v_0(r)^2}{6 D_r} \right)\frac{\partial^2}{\partial r^2} \tau(r).
+\end{align}
+The derivatives with respect to $\theta$ and $\phi$ are zero. Equation \ref{mfpt spherical} can be written as
+\begin{equation}\label{mfpt simple}
+ f(r) \frac{\partial}{\partial r} \tau(r) + \frac{\partial^2}{\partial r^2} \tau(r)=- g(r),
+\end{equation}
+with $f(r) =  \frac{v_0(r)v_0'(r)}{6D_r D_r + v_0(r)^2}  + 2r^{-1}$ and $g(r) = \frac{6D_r}{6D_r D_t + v_0(r)^2}$.
+Equation \ref{mfpt simple} can be written as a full derivative,
+\begin{equation}\label{mfpt s1}
+\frac{\partial}{\partial r} \left( exp\left[ \int_b^r dx f(x) \right] \frac{\partial}{\partial r} \tau(r) \right) = - g(r)\ exp\left[ \int_b^r dx f(x) \right].
+\end{equation}
+Integrating both sides from $r$ to $R$ and using the boundary condition $ \partial_r \tau(r) \bigg\rvert_{r=R} = 0$ gives
+\begin{equation}\label{mfpt s2}
+\frac{\partial}{\partial r} \tau(r) = \int_r^R dy\ g(y)\ exp\left[ \int_r^y dx f(x) \right],
+\end{equation}
+and integrating from $a$ to $r$ gives the equation for $\tau(r)$:
+\begin{equation}\label{mfpt final 1}
+\tau(r) = \int_a^rdz\ \int_z^R dy\ g(y)\ exp\left[ \int_z^y dx f(x) \right].
+\end{equation}
+
+Using the definition of $f(r)$ the exponent can be calculated.
+\begin{align}\label{exp f}
+\int_z^y dx f(x) & = \int_z^y dr \frac{v_0(r)v_0'(r)}{6D_r D_r + v_0(r)^2}  + 2r^{-1} \\
+& = \frac{1}{2} \int_{v_0(z)}^{v_0(y)} d\left[v_0(r)^2\right] \frac{1}{6D_r D_r + v_0(r)^2}+ 2 \int_z^y dr \frac{1}{r} \\
+& = \frac{1}{2} ln\left( \frac{6D_r D_r + v_0(y)^2}{6D_r D_r + v_0(z)^2} \right) + 2 ln\left( \frac{y}{z} \right) \\
+exp\left[ \int_z^y dx f(x) \right] &= \frac{y^2}{z^2} \sqrt{\frac{6D_r D_r + v_0(y)^2}{6D_r D_r + v_0(z)^2}}
+\end{align}
+Plugging this in equation \ref{mfpt final 1} gives
+
+\begin{align}
+\tau(r) & = \int_a^rdz\ \int_z^R dy \frac{6D_r}{6D_r D_t + v_0(y)^2}
+\frac{y^2}{z^2} \sqrt{\frac{6D_r D_r + v_0(y)^2}{6D_r D_r + v_0(z)^2}} \\
+& = \int_a^rdz\  z^{-2} \left(D_r + \frac{v_0(z)^2}{6D_R} \right)^{-\frac{1}{2}}
+\int_z^Rdy\
+y^{2} \left(D_r +\frac{v_0(y)^2}{6D_R} \right)^{-\frac{1}{2}}
+\end{align}
+\end{document}
